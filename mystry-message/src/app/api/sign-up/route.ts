@@ -18,7 +18,7 @@ export async function POST(request: Request) {
             }, { status: 400 })
         }
         const existingUserByemail = await UserModel.findOne({ email })
-        const verifycode = Math.floor(100000 + Math.random() * 900000).toString();
+        const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
         if (existingUserByemail) {
             if (existingUserByemail.isVerified) {
                 return Response.json({
@@ -28,21 +28,22 @@ export async function POST(request: Request) {
             } else {
                 const hashedPassword = await bcrypt.hash(password, 10)
                 existingUserByemail.password = hashedPassword
-                existingUserByemail.verifyCode = verifycode
+                existingUserByemail.verifyCode = verifyCode
                 existingUserByemail.verifyCodeExpiry = new Date(Date.now() + 3600000)
                 await existingUserByemail.save()
             }
         }
         else {
+        
             const hashedPassword = await bcrypt.hash(password, 10)
             const expiryDate = new Date()
             expiryDate.setHours(expiryDate.getHours() + 1)
-
+            // console.log(username)
             const newUser = new UserModel({
                 username,
                 email,
                 password: hashedPassword,
-                verifycode,
+                verifyCode,
                 verifyCodeExpiry: expiryDate,
                 isVerified: false,
                 isAcceptingMessage: true,
@@ -50,11 +51,12 @@ export async function POST(request: Request) {
             })
             await newUser.save()
             // send verification email
+            // console.log(username)
             const emailresponse = await sendVerificationEmail(
                 email,
                 username,
-                verifycode
-            )
+                verifyCode
+            ) // this line is sending me the email for verification of the code
             if (!emailresponse.success) {
                 return Response.json({
                     success: false,
@@ -65,7 +67,6 @@ export async function POST(request: Request) {
         return Response.json({
             success: true,
             message: "User registered succesffuly please verify your email"
-
         }, { status: 500 })
     } catch (error) {
         console.error('error registry user', error)

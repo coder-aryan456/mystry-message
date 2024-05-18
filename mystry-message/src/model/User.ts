@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface Message extends Document {
     content: string;
     createdAt: Date;
-}
+} // created an interface 
 
 const MessageSchema: Schema<Message> = new Schema({
     content: {
@@ -26,7 +26,7 @@ export interface User extends Document {
     isVerified: boolean;
     isAcceptingMessage: boolean;
     messages: Message[];
-}
+} //created an  interface
 
 const UserSchema: Schema<User> = new Schema({
     username: {
@@ -47,7 +47,7 @@ const UserSchema: Schema<User> = new Schema({
     },
     verifyCode: {
         type: String,
-        required: [true, "Verification code is required"],
+        required: [true, "Verification c is required"],
     },
     verifyCodeExpiry: {
         type: Date,

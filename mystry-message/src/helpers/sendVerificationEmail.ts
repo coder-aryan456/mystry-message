@@ -10,7 +10,7 @@ export async function sendVerificationEmail(
     try {
        await resend.emails.send({
         from:'onboarding@resend.dev',
-        to:'email',
+        to:email,
         subject:'Mystry message | Verification code',
         react:VerificationEmail({username,otp:verifycode})
        });
@@ -18,6 +18,5 @@ export async function sendVerificationEmail(
     } catch (error) {
         console.error("error sending verification email")
         return {success:false,message:'Failed to send verification email'}
-
     }
 }
