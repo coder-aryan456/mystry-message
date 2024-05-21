@@ -34,7 +34,6 @@ export async function POST(request: Request) {
             }
         }
         else {
-        
             const hashedPassword = await bcrypt.hash(password, 10)
             const expiryDate = new Date()
             expiryDate.setHours(expiryDate.getHours() + 1)
@@ -64,10 +63,11 @@ export async function POST(request: Request) {
                 }, { status: 500 })
             }
         }
+        // console.log("sdas")
         return Response.json({
             success: true,
             message: "User registered succesffuly please verify your email"
-        }, { status: 500 })
+        }, { status: 200 })
     } catch (error) {
         console.error('error registry user', error)
         return Response.json(
